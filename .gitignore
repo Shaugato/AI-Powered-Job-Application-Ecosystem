@@ -1,0 +1,44 @@
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+build/
+frontend/.vite/
+frontend/dist/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Data volumes (Docker bind mounts)
+postgres-data/
+minio-data/
+temporal-data/
+
+# Generated outputs
+artifacts/
+tmp/
+
+# Personal data (resumes, cover letters, career info)
+private-data/
+
+# Dev artifacts and temp files
+temp-*.json
+*.sqlite3
+*.log
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,7 @@
+﻿Tailoring prompt for cloud and DevOps jobs:
+
+- Emphasize AWS, Terraform, Linux, CI/CD, automation, reliability, and operational ownership.
+- Reuse grounded phrasing from prior evidence fragments rather than inventing new claims.
+- Keep the summary direct and ATS-friendly.
+- Prefer role-relevant bullet points over generic professional statements.
+- When security and monitoring appear in the job description, highlight operational hardening and incident support.

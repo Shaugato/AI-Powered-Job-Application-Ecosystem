@@ -1,0 +1,23 @@
+\\documentclass[11pt]{article}
+\\usepackage[margin=0.8in]{geometry}
+\\usepackage[T1]{fontenc}
+\\pagestyle{empty}
+\\setlength{\\parindent}{0pt}
+\\begin{document}
+\\noindent Dear Hiring Team,
+
+\\vspace{1em}
+\\noindent {{ document.opening }}.
+
+{% for paragraph in document.body_paragraphs %}
+\\vspace{0.9em}
+\\noindent {{ paragraph }}
+{% endfor %}
+
+\\vspace{1em}
+\\noindent {{ document.closing }}
+
+\\vspace{1em}
+\\noindent Regards,\\
+Candidate
+\\end{document}

@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "job-application-ecosystem"
+version = "0.1.0"
+description = "Local-first autonomous job application platform"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "sqlalchemy>=2.0.30",
+  "psycopg[binary]>=3.1.19",
+  "pydantic>=2.8.2",
+  "pydantic-settings>=2.3.4",
+  "python-multipart>=0.0.9",
+  "httpx>=0.27.0",
+  "openai>=1.50.0",
+  "jinja2>=3.1.4",
+  "temporalio>=1.7.0",
+  "minio>=7.2.7",
+  "python-docx>=1.1.2",
+  "pypdf>=4.3.1",
+  "pgvector>=0.3.4",
+  "tenacity>=8.4.2",
+  "playwright>=1.54.0",
+  "rapidfuzz>=3.9.7",
+  "networkx>=3.3",
+  "numpy>=1.26.4",
+]
+
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.2",
+  "pytest-asyncio>=0.23.8",
+]
+document_intelligence = [
+  "docling>=2.0.0",
+  "pdfplumber>=0.11.4",
+  "pymupdf>=1.24.9",
+  "pillow>=10.4.0",
+  "sentence-transformers>=3.0.1",
+  "faiss-cpu>=1.8.0.post1",
+  "transformers>=4.44.2",
+  "torch>=2.4.1",
+  "paddleocr>=2.8.1",
+  "pytesseract>=0.3.13",
+  "huggingface-hub>=0.30.0",
+  "doclayout-yolo>=0.0.3",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["backend*"]
+
+[tool.setuptools.package-data]
+"backend.app" = ["templates/*.j2"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["backend/tests"]

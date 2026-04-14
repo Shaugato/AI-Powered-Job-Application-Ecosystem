@@ -1,0 +1,120 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: job_ecosystem
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  minio:
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "${MINIO_API_HOST_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_HOST_PORT:-9001}:9001"
+    volumes:
+      - ./minio-data:/data
+
+  temporal:
+    image: temporalio/auto-setup:1.27.2
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PWD: postgres
+      POSTGRES_SEEDS: postgres
+    ports:
+      - "${TEMPORAL_HOST_PORT:-7233}:7233"
+    depends_on:
+      - postgres
+
+  temporal-ui:
+    image: temporalio/ui:2.39.0
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+    ports:
+      - "${TEMPORAL_UI_HOST_PORT:-8080}:8080"
+    depends_on:
+      - temporal
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/python.Dockerfile
+    command: python -m backend.app.api.main
+    env_file:
+      - .env
+    ports:
+      - "${API_HOST_PORT:-8000}:8000"
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    depends_on:
+      - postgres
+      - minio
+      - temporal
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/docker/python.Dockerfile
+    command: python -m backend.app.worker
+    env_file:
+      - .env
+    environment:
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+    volumes:
+      - ./:/workspace
+      - /workspace/infra/renderer/node_modules
+    working_dir: /workspace
+    depends_on:
+      - postgres
+      - minio
+      - temporal
+
+
+  document-worker:
+    build:
+      context: .
+      dockerfile: infra/docker/document-worker.Dockerfile
+    command: python -m backend.app.document_worker
+    env_file:
+      - .env
+    environment:
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    gpus: all
+    volumes:
+      - ./:/workspace
+      - /workspace/infra/renderer/node_modules
+    working_dir: /workspace
+    depends_on:
+      - postgres
+      - minio
+      - temporal
+
+  frontend:
+    build:
+      context: .
+      dockerfile: infra/docker/frontend.Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${FRONTEND_HOST_PORT:-5173}:${FRONTEND_PORT:-5173}"
+    volumes:
+      - ./frontend:/workspace/frontend
+      - /workspace/frontend/node_modules
+    working_dir: /workspace/frontend
+    depends_on:
+      - api
+
+
+

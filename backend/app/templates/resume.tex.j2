@@ -1,0 +1,57 @@
+\\documentclass[10pt]{article}
+\\usepackage[margin=0.55in]{geometry}
+\\usepackage[T1]{fontenc}
+\\usepackage{enumitem}
+\\usepackage[hidelinks]{hyperref}
+\\pagestyle{empty}
+\\setlength{\\parindent}{0pt}
+\\begin{document}
+{\\Large \\textbf{Tailored Resume}}\\
+\\vspace{0.5em}
+
+\\section*{Professional Summary}
+{{ document.summary }}
+
+\\section*{Skills}
+{{ document.skills | join(", ") }}
+
+{% if document.experience %}
+\\section*{Experience}
+{% for item in document.experience %}
+\\textbf{ {{ item.title }} }
+{% if item.subtitle %}\\hfill {{ item.subtitle }}{% endif %}\\
+\\begin{itemize}[leftmargin=*,topsep=0.2em,itemsep=0.15em]
+{% for bullet in item.bullets %}
+\\item {{ bullet }}
+{% endfor %}
+\\end{itemize}
+{% endfor %}
+{% endif %}
+
+{% if document.projects %}
+\\section*{Projects}
+{% for item in document.projects %}
+\\textbf{ {{ item.title }} }
+{% if item.subtitle %}\\hfill {{ item.subtitle }}{% endif %}\\
+\\begin{itemize}[leftmargin=*,topsep=0.2em,itemsep=0.15em]
+{% for bullet in item.bullets %}
+\\item {{ bullet }}
+{% endfor %}
+\\end{itemize}
+{% endfor %}
+{% endif %}
+
+{% if document.certifications %}
+\\section*{Certifications}
+{{ document.certifications | join(", ") }}
+{% endif %}
+
+{% if document.education %}
+\\section*{Education}
+\\begin{itemize}[leftmargin=*,topsep=0.2em,itemsep=0.15em]
+{% for item in document.education %}
+\\item {{ item }}
+{% endfor %}
+\\end{itemize}
+{% endif %}
+\\end{document}

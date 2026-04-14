@@ -1,0 +1,8 @@
+{
+  "name": "jobops-renderer",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "puppeteer": "^24.6.1"
+  }
+}
