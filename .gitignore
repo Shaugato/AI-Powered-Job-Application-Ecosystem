@@ -42,3 +42,19 @@ coverage/
 # OS files
 .DS_Store
 Thumbs.db
+
+# IDE / editor state
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln
+*.slnx
+
+# Office temp files
+~$*
+
+# Misc dev leftovers
+*.new
+Implementation_Plan.docx
